@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="plugin.video.dvl-live" name="DVL-Live" version="0.1.6" provider-name="FriedrichF">
+	<requires>
+    	<import addon="xbmc.python" version="2.1.0"/>
+    	<import addon="xbmc.addon" version="12.0.0"/>
+    	<import addon="xbmc.gui" version="4.0.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource" library="addon.py">
+        <provides>video</provides>
+    </extension>
+	<extension point="xbmc.addon.metadata">
+	    <summary>DVL-Live Viewer</summary>
+	    <description>Zeigt die Streams von der DVL-Live Homepage an</description>
+	    <platform>all</platform>
+  	</extension>
+</addon>

@@ -1,6 +1,10 @@
-import urllib,urllib2,re,xbmcplugin,xbmcgui
+'''
+Created on 28.10.2013
 
-#TV DASH - by You 2008.
+@author: FriedrichF
+'''
+
+import urllib,urllib2,re,xbmcplugin,xbmcgui
 
 def CATEGORIES():
         addDir('Maenner','http://www.dvllive.tv/videos',2,'')

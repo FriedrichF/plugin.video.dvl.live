@@ -1,3 +1,4 @@
+# coding: utf-8
 '''
 Created on 28.10.2013
 
@@ -7,28 +8,29 @@ Created on 28.10.2013
 import urllib,urllib2,re,xbmcplugin,xbmcgui
 
 def CATEGORIES():
-        addDir('Aktuell','http://www.dvllive.tv/videos',2,'')
-        addDir('Männer','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Männer',2,'')
+        addDir('Aktuell','http://www.dvllive.tv',1,'')
+        addDir('MÃ¤nner','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=MÃ¤nner',2,'')
         addDir( 'Frauen','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Frauen',2,'')
         addDir( '2.Liga','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=2.+Liga',2,'')
                        
-def INDEX(url):
+def AKTUELL(url):
+        #Links aus den neusten Videos auslesen
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
-        match=re.compile('').findall(link)
-        for thumbnail,url,name in match:
-                addDir(name,url,1,thumbnail)
+        matchLinkTitle=re.compile(r'<a href="(.+?)" title="(.+?)">').findall(link)
+        matchThumb=re.compile(r'(<img src="(.+?)" alt=".+?" width=".+?" height=".+?" />)|(<img alt=".+?" src="(.+?)" \/>)').findall(link)
+        for i in range(len(matchThumb)):
+                if matchThumb[i][0]=='':
+                    thumb = matchThumb[i][1]
+                else:
+                    thumb = matchThumb[i][0]
+                addLink(matchLinkTitle[i][1],"http://www.dvllive.tv"+matchLinkTitle[i][0],thumb)
                 
 def VIDEOLINKS(url,name):
-        
-        newPage = 1;
-        
-        #Schleife um alle Seiten abzufragen
-        while newPage == 1:
-            #Links der Videoseiten aus der Übersicht auslesen
+            #Links der Videoseiten aus der Ãœbersicht auslesen
             req = urllib2.Request(url)
             req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
             response = urllib2.urlopen(req)
@@ -45,16 +47,14 @@ def VIDEOLINKS(url,name):
                     link1=response1.read()
                     response1.close()
                     match1=re.compile(r'data-version=".+?" href="(.+?)"').findall(link1)
-                    #Video Link hinzufügen
+                    #Video Link hinzufï¿½gen
                     addLink(name,match1[0],thumb)
             
-            #Überprüfen ob weitere Seiten vorhanden sind
+            #ÃœberprÃ¼fen ob weitere Seiten vorhanden sind
             nextPage=re.compile(r'<a class="next_page" data-remote="true" rel="next" href="(.+?)">').findall(link)
-            if len(nextPage) == 0:
-                newPage = 0
-            else:
-                #nächste Seite in url Variable schreiben
-                url = "http://www.dvllive.tv"+nextPage[0]
+            if len(nextPage) == 1:
+                #nÃ¤chste Seite in url Variable schreiben
+                addDir("NÃ¤chste Seite","http://www.dvllive.tv"+nextPage[0],2,'')
         
 
                 
@@ -124,7 +124,7 @@ if mode==None or url==None or len(url)<1:
        
 elif mode==1:
         print ""+url
-        INDEX(url)
+        AKTUELL(url)
         
 elif mode==2:
         print ""+url

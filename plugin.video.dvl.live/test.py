@@ -5,16 +5,20 @@
 
 import urllib2,urllib,re
 
-url='http://www.dvllive.tv/videos'
+url='http://www.dvllive.tv'
 
 req = urllib2.Request(url)
 req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
 response = urllib2.urlopen(req)
 link=response.read()
 response.close()
-match=re.compile(r'<a href="(.+?)" title="(.+?)">(?:\n|\r\n?)                    <span class="thumb mini">(?:\n|\r\n?)                      <img alt=".+?" src="(.+?)" \/>').findall(link)
-
-url = "http://www.dvllive.tv"+match[0][0]
-print url
-
-print match
+matchLinkTitle=re.compile(r'<a href="(.+?)" title="(.+?)">').findall(link)
+matchThumb=re.compile(r'<img src="(.+?)" alt=".+?" width=".+?" height=".+?" />|<img alt=".+?" src="(.+?)" \/>').findall(link)
+for i in range(len(matchThumb)):
+        print matchLinkTitle[i][1]
+        print "http://www.dvllive.tv"+matchLinkTitle[i][0]
+        if matchThumb[i][0]=='':
+            thumb = matchThumb[i][1]
+        else:
+            thumb = matchThumb[i][0]   
+        print thumb

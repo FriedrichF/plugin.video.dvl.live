@@ -20,8 +20,10 @@ def AKTUELL(url):
         response = urllib2.urlopen(req)
         link=response.read()
         response.close()
+        #Finde Link und Titel
         matchLinkTitle=re.compile(r'<a href="(.+?)" title="(.+?)">').findall(link)
-        matchThumb=re.compile(r'(<img src="(.+?)" alt=".+?" width=".+?" height=".+?" />)|(<img alt=".+?" src="(.+?)" \/>)').findall(link)
+        #Finde Thumbnail adresse. Für großes Fenster anderer Ausdruck als kleine Fenster!
+        matchThumb=re.compile(r'<img src="(.+?)" alt=".+?" width=".+?" height=".+?" />|<img alt=".+?" src="(.+?)" \/>').findall(link)
         for i in range(len(matchThumb)):
                 if matchThumb[i][0]=='':
                     thumb = matchThumb[i][1]

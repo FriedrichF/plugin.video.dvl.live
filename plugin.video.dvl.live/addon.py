@@ -22,14 +22,22 @@ def AKTUELL(url):
         response.close()
         #Finde Link und Titel
         matchLinkTitle=re.compile(r'<a href="(.+?)" title="(.+?)">').findall(link)
+        
         #Finde Thumbnail adresse. Für großes Fenster anderer Ausdruck als kleine Fenster!
         matchThumb=re.compile(r'<img src="(.+?)" alt=".+?" width=".+?" height=".+?" />|<img alt=".+?" src="(.+?)" \/>').findall(link)
         for i in range(len(matchThumb)):
+                req1 = urllib2.Request("http://www.dvllive.tv"+matchLinkTitle[i][0])
+                req1.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+                response1 = urllib2.urlopen(req1)
+                link1=response1.read()
+                response1.close()
+                match1=re.compile(r'data-version=".+?" href="(.+?)"').findall(link1)
+                    
                 if matchThumb[i][0]=='':
                     thumb = matchThumb[i][1]
                 else:
                     thumb = matchThumb[i][0]
-                addLink(matchLinkTitle[i][1],"http://www.dvllive.tv"+matchLinkTitle[i][0],thumb)
+                addLink(matchLinkTitle[i][1],match1[0],thumb)
                 
 def VIDEOLINKS(url,name):
             #Links der Videoseiten aus der Übersicht auslesen
@@ -49,7 +57,7 @@ def VIDEOLINKS(url,name):
                     link1=response1.read()
                     response1.close()
                     match1=re.compile(r'data-version=".+?" href="(.+?)"').findall(link1)
-                    #Video Link hinzuf�gen
+                    #Video Link hinzufügen
                     addLink(name,match1[0],thumb)
             
             #Überprüfen ob weitere Seiten vorhanden sind

@@ -32,12 +32,12 @@ def AKTUELL(url):
                 link1=response1.read()
                 response1.close()
                 match1=re.compile(r'data-version=".+?" href="(.+?)"').findall(link1)
-                    
-                if matchThumb[i][0]=='':
-                    thumb = matchThumb[i][1]
-                else:
-                    thumb = matchThumb[i][0]
-                addLink(matchLinkTitle[i][1],match1[0],thumb)
+                if match1:
+                    if matchThumb[i][0]=='':
+                        thumb = matchThumb[i][1]
+                    else:
+                        thumb = matchThumb[i][0]
+                    addLink(matchLinkTitle[i][1],match1[0],thumb)
                 
 def VIDEOLINKS(url,name):
             #Links der Videoseiten aus der Übersicht auslesen

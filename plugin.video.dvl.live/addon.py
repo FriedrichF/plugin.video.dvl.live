@@ -57,8 +57,9 @@ def VIDEOLINKS(url,name):
                     link1=response1.read()
                     response1.close()
                     match1=re.compile(r'data-version=".+?" href="(.+?)"').findall(link1)
-                    #Video Link hinzufügen
-                    addLink(name,match1[0],thumb)
+                    #Wenn Link vorhanden Video Link hinzufügen
+                    if match1:
+                        addLink(name,match1[0],thumb)
             
             #Überprüfen ob weitere Seiten vorhanden sind
             nextPage=re.compile(r'<a class="next_page" data-remote="true" rel="next" href="(.+?)">').findall(link)

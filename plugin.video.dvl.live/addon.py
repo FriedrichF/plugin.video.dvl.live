@@ -6,6 +6,21 @@ Created on 28.10.2013
 '''
 
 import urllib,urllib2,re,xbmcplugin,xbmcgui
+from HTMLParser import HTMLParser
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        self.fed = []
+    def handle_data(self, d):
+        self.fed.append(d)
+    def get_data(self):
+        return ''.join(self.fed)
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
 
 def CATEGORIES():
         addDir('Aktuell','http://www.dvllive.tv',1,'')
@@ -32,12 +47,16 @@ def AKTUELL(url):
                 link1=response1.read()
                 response1.close()
                 match1=re.compile(r'data-version=".+?" href="(.+?)"').findall(link1)
+                #Plot Finden
+                matchPlot=re.compile(r'<h1>.+?</h1>(.+?)</div>', flags=re.MULTILINE|re.DOTALL).findall(link1)
+                plot = strip_tags(matchPlot[0]).strip()
+                
                 if match1:
                     if matchThumb[i][0]=='':
                         thumb = matchThumb[i][1]
                     else:
                         thumb = matchThumb[i][0]
-                    addLink(matchLinkTitle[i][1],match1[0],thumb)
+                    addLink(matchLinkTitle[i][1],match1[0],thumb,plot)
                 
 def VIDEOLINKS(url,name):
             #Links der Videoseiten aus der Übersicht auslesen
@@ -57,9 +76,12 @@ def VIDEOLINKS(url,name):
                     link1=response1.read()
                     response1.close()
                     match1=re.compile(r'data-version=".+?" href="(.+?)"').findall(link1)
+                    #Plot Finden
+                    matchPlot=re.compile(r'<h1>.+?</h1>(.+?)</div>', flags=re.MULTILINE|re.DOTALL).findall(link1)
+                    plot = strip_tags(matchPlot[0]).strip()
                     #Wenn Link vorhanden Video Link hinzufügen
                     if match1:
-                        addLink(name,match1[0],thumb)
+                        addLink(name,match1[0],thumb,plot)
             
             #Überprüfen ob weitere Seiten vorhanden sind
             nextPage=re.compile(r'<a class="next_page" data-remote="true" rel="next" href="(.+?)">').findall(link)
@@ -90,10 +112,10 @@ def get_params():
 
 
 
-def addLink(name,url,iconimage):
+def addLink(name,url,iconimage,plot):
         ok=True
         liz=xbmcgui.ListItem(name, iconImage="DefaultVideo.png", thumbnailImage=iconimage)
-        liz.setInfo( type="Video", infoLabels={ "Title": name } )
+        liz.setInfo( type="Video", infoLabels={ "Title": name, "plot": plot } )
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
         return ok
 

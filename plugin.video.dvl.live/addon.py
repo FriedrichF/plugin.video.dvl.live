@@ -22,11 +22,36 @@ def strip_tags(html):
     s.feed(html)
     return s.get_data()
 
+#Klasse um Termine für Live Streams anzuzeigen
+class ChildClass(xbmcgui.Window):
+        def __init__(self):
+                req = urllib2.Request("http://www.dvllive.tv/live-termine")
+                req.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
+                response = urllib2.urlopen(req)
+                link=response.read()
+                response.close()
+                #Finde Link und Titel
+                matchNext=re.compile(r'<h1>LIVE Termine</h1>.+?</p>(.+?)</div>', flags=re.MULTILINE|re.DOTALL).findall(link)
+                
+                nextDates = strip_tags(matchNext[0]).strip()
+                
+                self.addControl(xbmcgui.ControlImage(0,0,800,600, ''))
+                self.strActionInfo = xbmcgui.ControlLabel(200, 60, 200, 200, '', 'font14', '0xFFBBFFBB')
+                self.addControl(self.strActionInfo)
+                self.strActionInfo.setLabel('Push BACK to return to the first window')
+                self.strActionInfo = xbmcgui.ControlLabel(240, 200, 200, 200, '', 'font13', '0xFFFFFF99')
+                self.addControl(self.strActionInfo)
+                self.strActionInfo.setLabel(nextDates)
+         
+                def onAction(self, action):
+                        self.close()
+
 def CATEGORIES():
         addDir('Aktuell','http://www.dvllive.tv',1,'')
         addDir('Männer','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Männer',2,'')
         addDir( 'Frauen','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Frauen',2,'')
         addDir( '2.Liga','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=2.+Liga',2,'')
+        addDir('LIVE Termine','',3,'')
                        
 def AKTUELL(url):
         #Links aus den neusten Videos auslesen
@@ -163,6 +188,10 @@ elif mode==2:
         print ""+url
         VIDEOLINKS(url,name)
 
+elif mode==3:
+        popup = ChildClass()
+        popup .doModal()
+        del popup
 
 
 xbmcplugin.endOfDirectory(int(sys.argv[1]))

@@ -28,7 +28,7 @@ def CATEGORIES():
         addDir('Männer','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Männer',2,'')
         addDir( 'Frauen','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Frauen',2,'')
         addDir( '2.Liga','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=2.+Liga',2,'')
-        addDates('LIVE Termine (Info)',)
+        addDates('LIVE Termine (Info)')
                        
 def AKTUELL(url):
         #Links aus den neusten Videos auslesen

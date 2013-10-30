@@ -147,6 +147,7 @@ def addDates(name):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url='',listitem=liz,isFolder=False)
         return ok
               
+xbmcplugin.setPluginFanart(int(sys.argv[1]), 'fanart.jpg')
 params=get_params()
 url=None
 name=None

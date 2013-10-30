@@ -53,12 +53,15 @@ def AKTUELL(url):
                 matchPlot=re.compile(r'<h1>.+?</h1>(.+?)</div>', flags=re.MULTILINE|re.DOTALL).findall(link1)
                 plot = strip_tags(matchPlot[0]).strip()
                 
+                if matchThumb[i][0]=='':
+                    thumb = matchThumb[i][1]
+                else:
+                    thumb = matchThumb[i][0]
+                
                 if match1:
-                    if matchThumb[i][0]=='':
-                        thumb = matchThumb[i][1]
-                    else:
-                        thumb = matchThumb[i][0]
                     addLink(matchLinkTitle[i][1],match1[0],thumb,plot)
+                else:
+                    addLink(matchLinkTitle[i][1],'',thumb,plot)
                 
 def VIDEOLINKS(url,name):
             #Links der Videoseiten aus der Übersicht auslesen

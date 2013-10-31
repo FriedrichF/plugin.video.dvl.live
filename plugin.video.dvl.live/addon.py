@@ -5,8 +5,12 @@ Created on 28.10.2013
 @author: FriedrichF
 '''
 
-import urllib,urllib2,re,xbmcplugin,xbmcgui
+import urllib,urllib2,re,xbmcplugin,xbmcgui,xbmcaddon
 from HTMLParser import HTMLParser
+
+addonID = 'plugin.video.dvl.live'
+addon = xbmcaddon.Addon(id=addonID)
+translation = addon.getLocalizedString
 
 #HTML Tags entfernen
 class MLStripper(HTMLParser):
@@ -24,11 +28,11 @@ def strip_tags(html):
     return s.get_data()
 
 def CATEGORIES():
-        addDir('Aktuell','http://www.dvllive.tv',1,'')
-        addDir('Männer','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Männer',2,'')
-        addDir( 'Frauen','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Frauen',2,'')
-        addDir( '2.Liga','http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=2.+Liga',2,'')
-        addDates('LIVE Termine (Info)')
+        addDir(translation(30001),'http://www.dvllive.tv',1,'')
+        addDir(translation(30002),'http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Männer',2,'')
+        addDir(translation(30003),'http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Frauen',2,'')
+        addDir(translation(30004),'http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=2.+Liga',2,'')
+        addDates(translation(30005))
                        
 def AKTUELL(url):
         #Links aus den neusten Videos auslesen
@@ -108,7 +112,7 @@ def VIDEOLINKS(url,name):
             nextPage=re.compile(r'<a class="next_page" data-remote="true" rel="next" href="(.+?)">').findall(link)
             if len(nextPage) == 1:
                 #nächste Seite in url Variable schreiben
-                addDir("Nächste Seite","http://www.dvllive.tv"+nextPage[0],2,'')
+                addDir(translation(30006),"http://www.dvllive.tv"+nextPage[0],2,'')
         
 
                 
@@ -166,7 +170,6 @@ def addDates(name):
         ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url='',listitem=liz,isFolder=False)
         return ok
               
-xbmcplugin.setPluginFanart(int(sys.argv[1]), 'fanart.jpg')
 params=get_params()
 url=None
 name=None

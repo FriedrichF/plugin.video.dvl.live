@@ -53,15 +53,21 @@ def AKTUELL(url):
                 matchPlot=re.compile(r'<h1>.+?</h1>(.+?)</div>', flags=re.MULTILINE|re.DOTALL).findall(link1)
                 plot = strip_tags(matchPlot[0]).strip()
                 
+                #Live Termin finden
+                matchDate=re.compile(r'<span class="date alert">(.+?)</span>', flags=re.MULTILINE|re.DOTALL).findall(link1)
+                name = matchLinkTitle[i][1]
+                if matchDate:
+                    name = (matchDate[0] + " " + name).strip()
+                
                 if matchThumb[i][0]=='':
                     thumb = matchThumb[i][1]
                 else:
                     thumb = matchThumb[i][0]
                 
                 if match1:
-                    addLink(matchLinkTitle[i][1],match1[0],thumb,plot)
+                    addLink(name,match1[0],thumb,plot)
                 else:
-                    addLink(matchLinkTitle[i][1],'',thumb,plot)
+                    addLink(name,'',thumb,plot)
                 
 def VIDEOLINKS(url,name):
             #Links der Videoseiten aus der Übersicht auslesen
@@ -70,10 +76,11 @@ def VIDEOLINKS(url,name):
             response = urllib2.urlopen(req)
             link=response.read()
             response.close()
-            match=re.compile(r'<a href="(.+?)" title="(.+?)">(?:\n|\r\n?)                    <span class="thumb mini">(?:\n|\r\n?)                      <img alt=".+?" src="(.+?)" \/>').findall(link)
+            match=re.compile(r'<div class="main">(.*)', flags=re.MULTILINE|re.DOTALL).findall(link)
+            final=re.compile(r'<a href="(.+?)" title="(.+?)">.+?<span class="thumb mini">.+?<img alt=".+?" src="(.+?)" \/>', flags=re.MULTILINE|re.DOTALL).findall(match[0])
             
             #Link zu Video aus Videoseite auslesen
-            for url,name,thumb in match:
+            for url,name,thumb in final:
                     url = "http://www.dvllive.tv"+url
                     req1 = urllib2.Request(url)
                     req1.add_header('User-Agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3')
@@ -81,12 +88,21 @@ def VIDEOLINKS(url,name):
                     link1=response1.read()
                     response1.close()
                     match1=re.compile(r'data-version=".+?" href="(.+?)"').findall(link1)
+                    
                     #Plot Finden
                     matchPlot=re.compile(r'<h1>.+?</h1>(.+?)</div>', flags=re.MULTILINE|re.DOTALL).findall(link1)
                     plot = strip_tags(matchPlot[0]).strip()
+                    
+                    #Live Termin finden
+                    matchDate=re.compile(r'<span class="date alert">(.+?)</span>', flags=re.MULTILINE|re.DOTALL).findall(link1)
+                    if matchDate:
+                        name = (matchDate[0] + " " + name).strip()
+                    
                     #Wenn Link vorhanden Video Link hinzufügen
                     if match1:
                         addLink(name,match1[0],thumb,plot)
+                    else:
+                        addLink(name,'',thumb,plot)
             
             #Überprüfen ob weitere Seiten vorhanden sind
             nextPage=re.compile(r'<a class="next_page" data-remote="true" rel="next" href="(.+?)">').findall(link)

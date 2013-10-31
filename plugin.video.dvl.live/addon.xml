@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.dvl.live" name="DVL-Live.tv" version="0.4.5" provider-name="FriedrichF">
+<addon id="plugin.video.dvl.live" name="DVL-Live.tv" version="0.4.2" provider-name="FriedrichF">
 	<requires>
     	<import addon="xbmc.python" version="2.1.0"/>
     	<import addon="xbmc.addon" version="12.0.0"/>
@@ -9,8 +9,9 @@
         <provides>video</provides>
     </extension>
 	<extension point="xbmc.addon.metadata">
-	    <summary>DVL-Live Viewer</summary>
-	    <description>Zeigt die Streams von der DVL-Live.tv Homepage an</description>
+	    <summary lang="de">Zeigt die Streams von der DVL-Live.tv Homepage an</summary>
+	    <description lang="de">Streams und Live Übertragungen der Deutschen Volleyball Liga.</description>
 	    <platform>all</platform>
+	    <language>de</language>
   	</extension>
 </addon>

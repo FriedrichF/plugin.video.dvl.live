@@ -28,11 +28,11 @@ def strip_tags(html):
     return s.get_data()
 
 def CATEGORIES():
-        addDir(translation(30001),'http://www.dvllive.tv',1,'')
-        addDir(translation(30002),'http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Männer',2,'')
-        addDir(translation(30003),'http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Frauen',2,'')
-        addDir(translation(30004),'http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=2.+Liga',2,'')
-        addDates(translation(30005))
+        addDir(translation(30001).encode('utf-8'),'http://www.dvllive.tv',1,'')
+        addDir(translation(30002).encode('utf-8'),'http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Männer',2,'')
+        addDir(translation(30003).encode('utf-8'),'http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=Frauen',2,'')
+        addDir(translation(30004).encode('utf-8'),'http://www.dvllive.tv/videos?tags%5Bliga%5D%5B%5D=2.+Liga',2,'')
+        addDates(translation(30005).encode('utf-8'))
                        
 def AKTUELL(url):
         #Links aus den neusten Videos auslesen
@@ -112,7 +112,7 @@ def VIDEOLINKS(url,name):
             nextPage=re.compile(r'<a class="next_page" data-remote="true" rel="next" href="(.+?)">').findall(link)
             if len(nextPage) == 1:
                 #nächste Seite in url Variable schreiben
-                addDir(translation(30006),"http://www.dvllive.tv"+nextPage[0],2,'')
+                addDir(translation(30006).encode('utf-8'),"http://www.dvllive.tv"+nextPage[0],2,'')
         
 
                 
